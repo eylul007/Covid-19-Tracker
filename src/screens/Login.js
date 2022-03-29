@@ -59,7 +59,7 @@ export default class Login extends React.Component{
                       onPress={()=>navigate('edevletlogin')}
                     style={{
                         color:"white",
-                    }}>E-devlet Login</Text>
+                    }}>E-devlet Login.</Text>
                 </View>
 
                 {/* It is for login button for foreign users */}
