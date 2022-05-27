@@ -1,5 +1,6 @@
 package com.yicit;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.facebook.react.ReactActivity;
@@ -17,6 +18,27 @@ public class MainActivity extends ReactActivity {
     // This is required for expo-splash-screen.
     setTheme(R.style.AppTheme);
     super.onCreate(savedInstanceState);
+
+
+    Thread t = new Thread(() -> startService(new Intent(this, BTBluetoothApp.class)));
+    t.start();
+
+    /*
+    Thread t2 = new Thread(() -> startService(new Intent(this, Transmitter.class)));
+    t2.start();
+    */
+    try {
+      t.join();
+   //   t2.join();
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    }
+
+    /*
+    Intent intent = new Intent(this, BTBluetoothApp.class);
+    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+    this.startActivity(intent);
+    */
 
     /*
     // Creating an object of ExecutorService class to

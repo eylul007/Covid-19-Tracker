@@ -35,7 +35,8 @@
     <service android:name=".Transmitter"/>
     <activity android:name=".MonitoringActivity"></activity>
     <activity android:name=".RangingActivity"></activity>
-    <activity android:name=".BTBluetoothApp"></activity>
+    <service android:name=".BTBluetoothApp"/>
+
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity"/>
   </application>
 </manifest>

@@ -2,7 +2,6 @@ package com.yicit;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 
 import androidx.annotation.NonNull;
@@ -58,16 +57,13 @@ public class MainApplication extends Application implements ReactApplication {
 
   @Override
   public void onCreate() {
-    super.onCreate();
+      super.onCreate();
 
-    SoLoader.init(this, /* native exopackage */ false);
+      SoLoader.init(this, /* native exopackage */ false);
 
-    initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
-    ApplicationLifecycleDispatcher.onApplicationCreate(this);
+      initializeFlipper(this, getReactNativeHost().getReactInstanceManager());
+      ApplicationLifecycleDispatcher.onApplicationCreate(this);
 
-    Intent intent = new Intent(this, MainActivity.class);
-    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-    this.startActivity(intent);
   }
 
   @Override

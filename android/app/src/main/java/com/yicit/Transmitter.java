@@ -8,7 +8,6 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.le.AdvertiseCallback;
 import android.bluetooth.le.AdvertiseSettings;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -18,7 +17,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconParser;
@@ -112,54 +110,18 @@ public class Transmitter extends Service {
     private boolean checkPrerequisites() {
 
         if (Build.VERSION.SDK_INT < 18) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             System.out.println("This OS doesnt support BLE!");
-            builder.setTitle("Bluetooth LE not supported by this device's operating system");
-            builder.setMessage("You will not be able to transmit as a Beacon");
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    //finish();
-                }
-
-            });
-            builder.show();
             return false;
         }
         if (!getApplicationContext().getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             System.out.println("This device doesnt support BLE");
-            builder.setTitle("Bluetooth LE not supported by this device");
-            builder.setMessage("You will not be able to transmit as a Beacon");
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    //finish();
-                }
-
-            });
-            builder.show();
             return false;
         }
         if (!((BluetoothManager) getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter().isEnabled()){
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
             System.out.println("BLE not enabled!");
-            builder.setTitle("Bluetooth not enabled");
-            builder.setMessage("Please enable Bluetooth and restart this app.");
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
 
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    // finish();
-                }
-
-            });
-            builder.show();
             return false;
 
         }
@@ -169,18 +131,6 @@ public class Transmitter extends Service {
             ((BluetoothManager) this.getApplicationContext().getSystemService(Context.BLUETOOTH_SERVICE)).getAdapter().getBluetoothLeAdvertiser();
         }
         catch (Exception e) {
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Bluetooth LE advertising unavailable");
-            builder.setMessage("Sorry, the operating system on this device does not support Bluetooth LE advertising.  As of July 2014, only the Android L preview OS supports this feature in user-installed apps.");
-            builder.setPositiveButton(android.R.string.ok, null);
-            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-                @Override
-                public void onDismiss(DialogInterface dialog) {
-                    // finish();
-                }
-
-            });
-            builder.show();
             return false;
 
         }
