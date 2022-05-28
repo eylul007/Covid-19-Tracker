@@ -1,16 +1,14 @@
 package com.yicit;
 
-import android.Manifest;
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.MonitorNotifier;
@@ -21,17 +19,24 @@ import org.altbeacon.beacon.Region;
  * @author dyoung
  * @author Matt Tyler
  */
-public class MonitoringActivity extends Activity implements MonitorNotifier {
+public class MonitoringActivity extends Service implements MonitorNotifier {
 	protected static final String TAG = "MonitoringActivity";
 	private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
 	private static final int PERMISSION_REQUEST_BACKGROUND_LOCATION = 2;
 
+	/*
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		Log.d(TAG, "onCreate");
 		super.onCreate(savedInstanceState);
+
+	}*/
+
+	@Override
+	public int onStartCommand(Intent intent, int flags, int startId) {
+		Log.d(TAG, "onCreate");
+
 		verifyBluetooth();
-		requestPermissions();
+		//requestPermissions();
 		BeaconManager.getInstanceForApplication(this).addMonitorNotifier(this);
 		// No need to start monitoring here because we already did it in
 		// BTBluetoothApp.onCreate
@@ -42,6 +47,7 @@ public class MonitoringActivity extends Activity implements MonitorNotifier {
 		else {
 			Log.d(TAG,"No beacons");
 		}
+		return START_STICKY;
 	}
 
 	@Override
@@ -55,6 +61,7 @@ public class MonitoringActivity extends Activity implements MonitorNotifier {
 		Log.d(TAG,"didDetermineStateForRegion called with state: " + (state == 1 ? "INSIDE ("+state+")" : "OUTSIDE ("+state+")"));
 	}
 
+	/*
 	private void requestPermissions() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -119,9 +126,10 @@ public class MonitoringActivity extends Activity implements MonitorNotifier {
 			}
 		}
 	}
+*/
 
 
-
+	/*
 	@Override
 	public void onRequestPermissionsResult(int requestCode,
 										   String permissions[], int[] grantResults) {
@@ -166,10 +174,13 @@ public class MonitoringActivity extends Activity implements MonitorNotifier {
 			}
 		}
 	}
-
+*/
 	public void onRangingClicked(View view) {
+		startService(new Intent(this, RangingActivity.class));
+
+		/*
 		Intent myIntent = new Intent(this, RangingActivity.class);
-		this.startActivity(myIntent);
+		this.startActivity(myIntent);*/
 	}
 	/*public void onEnableClicked(View view) {
 		// This is a toggle.  Each time we tap it, we start or stop
@@ -194,7 +205,7 @@ public class MonitoringActivity extends Activity implements MonitorNotifier {
 				builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
 					@Override
 					public void onDismiss(DialogInterface dialog) {
-						finishAffinity();
+						//finishAffinity();
 					}
 				});
 				builder.show();
@@ -209,7 +220,7 @@ public class MonitoringActivity extends Activity implements MonitorNotifier {
 
 				@Override
 				public void onDismiss(DialogInterface dialog) {
-					finishAffinity();
+					//finishAffinity();
 				}
 
 			});
@@ -217,5 +228,11 @@ public class MonitoringActivity extends Activity implements MonitorNotifier {
 
 		}
 
+	}
+
+	@Nullable
+	@Override
+	public IBinder onBind(Intent intent) {
+		return null;
 	}
 }

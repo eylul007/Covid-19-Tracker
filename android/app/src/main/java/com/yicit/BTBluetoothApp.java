@@ -1,6 +1,5 @@
 package com.yicit;
 
-import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -59,10 +58,15 @@ public class BTBluetoothApp extends Service implements MonitorNotifier {
         //Notification.Builder builder = new Notification.Builder(this);
 
         //builder.setContentTitle("Scanning");
+
+        startService(new Intent(this, MonitoringActivity.class));
+
+        /*
         Intent intent2 = new Intent(this, MonitoringActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(
                 this, 0, intent2, PendingIntent.FLAG_UPDATE_CURRENT
-        );
+        );*/
+
         //BT-Anlamadım
         //builder.setContentIntent(pendingIntent);
         /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

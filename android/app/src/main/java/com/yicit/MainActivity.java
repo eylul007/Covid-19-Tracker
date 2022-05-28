@@ -23,13 +23,13 @@ public class MainActivity extends ReactActivity {
     Thread t = new Thread(() -> startService(new Intent(this, BTBluetoothApp.class)));
     t.start();
 
-    /*
+
     Thread t2 = new Thread(() -> startService(new Intent(this, Transmitter.class)));
     t2.start();
-    */
+
     try {
       t.join();
-   //   t2.join();
+      t2.join();
     } catch (InterruptedException e) {
       e.printStackTrace();
     }

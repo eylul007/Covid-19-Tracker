@@ -1,20 +1,18 @@
 package com.yicit;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
 
-import org.altbeacon.beacon.Beacon;
+import androidx.annotation.Nullable;
+
 import org.altbeacon.beacon.BeaconManager;
-import org.altbeacon.beacon.RangeNotifier;
-import org.altbeacon.beacon.Region;
 
-import java.util.Collection;
-
-public class RangingActivity extends Activity {
+public class RangingActivity extends Service {
     protected static final String TAG = "RangingActivity";
     private BeaconManager beaconManager = BeaconManager.getInstanceForApplication(this);
 
+    /*
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,11 +34,18 @@ public class RangingActivity extends Activity {
         beaconManager.addRangeNotifier(rangeNotifier);
         beaconManager.startRangingBeacons(com.yicit.BTBluetoothApp.bt_Region);
     }
-
+*/
+    /*
     @Override
     protected void onPause() {
         super.onPause();
         beaconManager.stopRangingBeacons(com.yicit.BTBluetoothApp.bt_Region);
         beaconManager.removeAllRangeNotifiers();
+    }*/
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }
