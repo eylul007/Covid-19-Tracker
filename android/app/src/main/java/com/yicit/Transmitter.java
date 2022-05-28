@@ -13,8 +13,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
@@ -28,10 +26,6 @@ public class Transmitter extends Service {
     private static final String TAG = "MainActivity";
     private BeaconTransmitter mBeaconTransmitter;
 
-
-    private int lock;
-    TextView mTextView;
-    Button mButton;
 
     @SuppressLint("MissingPermission")
     private void transmitStart(Beacon beacon) {
@@ -60,44 +54,52 @@ public class Transmitter extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // do your jobs here
-        lock = 1;
-        while(lock == 1) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println("In the start command!");
-            if (checkPrerequisites()) {
-                System.out.println("Bok");
+        new Thread(
+            new Runnable() {
+                @Override
+                public void run() {
+                    while (true) {
+                        try {
+                            if (checkPrerequisites()) {
+                                System.out.println("Bok");
 
-                // Sets up to transmit as an AltBeacon-style beacon.  If you wish to transmit as a different
-                // type of beacon, simply provide a different parser expression.  To find other parser expressions,
-                // for other beacon types, do a Google search for "setBeaconLayout" including the quotes
-                mBeaconTransmitter = new BeaconTransmitter(this, new BeaconParser().setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
-                // Transmit a beacon with Identifiers 2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6 1 2
-                Beacon beacon = new Beacon.Builder()
-                        .setId1("2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6")
-                        .setId2("1")
-                        .setId3("2")
-                        .setManufacturer(0x0000) // Choose a number of 0x00ff or less as some devices cannot detect beacons with a manufacturer code > 0x00ff
-                        .setTxPower(-59)
-                        .setDataFields(Arrays.asList(new Long[]{0l}))
-                        .build();
+                                // Sets up to transmit as an AltBeacon-style beacon.  If you wish to transmit as a different
+                                // type of beacon, simply provide a different parser expression.  To find other parser expressions,
+                                // for other beacon types, do a Google search for "setBeaconLayout" including the quotes
+                                mBeaconTransmitter = new BeaconTransmitter(Transmitter.this, new BeaconParser().setBeaconLayout("m:2-3=beac,i:4-19,i:20-21,i:22-23,p:24-24,d:25-25"));
+                                // Transmit a beacon with Identifiers 2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6 1 2
+                                Beacon beacon = new Beacon.Builder()
+                                        .setId1("2F234454-CF6D-4A0F-ADF2-F4911BA9FFA6")
+                                        .setId2("1")
+                                        .setId3("2")
+                                        .setManufacturer(0x0000) // Choose a number of 0x00ff or less as some devices cannot detect beacons with a manufacturer code > 0x00ff
+                                        .setTxPower(-59)
+                                        .setDataFields(Arrays.asList(new Long[]{0l}))
+                                        .build();
+                                transmitStart(beacon);
+                                Thread.sleep(1000);
+                            }
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("In the start command!");
 
-                transmitStart(beacon);
+                    }
+                }
             }
-        }
-        return START_STICKY;
+        ).start();
+        stopSelf();
+        return START_NOT_STICKY;
     }
 
     @Override
     public void onDestroy() {
         System.out.println("On Destroy!");
         super.onDestroy();
-        mBeaconTransmitter.stopAdvertising();
 
-        lock = 0;
+        if(mBeaconTransmitter != null) {
+            mBeaconTransmitter.stopAdvertising();
+        }
     }
 
     @Nullable

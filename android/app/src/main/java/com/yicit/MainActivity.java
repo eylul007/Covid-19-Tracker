@@ -20,19 +20,23 @@ public class MainActivity extends ReactActivity {
     super.onCreate(savedInstanceState);
 
 
-    Thread t = new Thread(() -> startService(new Intent(this, BTBluetoothApp.class)));
-    t.start();
+    startService(new Intent(this, Transmitter.class));
+    startService(new Intent(this, BTBluetoothApp.class));
+    //Thread t = new Thread(() -> startService(new Intent(this, Transmitter.class)));
+    //t.start();
 
 
-    Thread t2 = new Thread(() -> startService(new Intent(this, Transmitter.class)));
+    /*Thread t2 = new Thread(() -> startService(new Intent(this, BTBluetooth.class)));
     t2.start();
-
+*/
+    /*
     try {
       t.join();
-      t2.join();
+      //  t2.join();
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+    */
 
     /*
     Intent intent = new Intent(this, BTBluetoothApp.class);
