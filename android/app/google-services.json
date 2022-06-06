@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "799836603124",
+    "project_id": "test-77f2a",
+    "storage_bucket": "test-77f2a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:799836603124:android:6ef40e5c2dc6227d1ed4a1",
+        "android_client_info": {
+          "package_name": "com.yicit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "799836603124-mf2e3135vn50d79vmcr0hcllu1g0vi8d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1tYbkyXYykZFzidJ3Ae47ns0IH6585Oo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "799836603124-mf2e3135vn50d79vmcr0hcllu1g0vi8d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

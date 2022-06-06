@@ -35,6 +35,16 @@ public class MonitoringActivity extends Service implements MonitorNotifier {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d(TAG, "onCreate");
+		//
+		if (BeaconManager.getInstanceForApplication(this).getMonitoredRegions().size() > 0) {
+			BeaconManager.getInstanceForApplication(this).stopMonitoring(BTBluetoothApp.bt_Region);
+			System.out.println("Enable Monitoring");
+		}
+		else {
+			BeaconManager.getInstanceForApplication(this).startMonitoring(BTBluetoothApp.bt_Region);
+			System.out.println("Disable Monitoring");
+		}
+		//
 
 		verifyBluetooth();
 		//requestPermissions();
@@ -44,6 +54,7 @@ public class MonitoringActivity extends Service implements MonitorNotifier {
 		// check if we are currently inside or outside of that region to update the display
 		if (com.yicit.BTBluetoothApp.insideRegion) {
 			Log.d(TAG,"There is beacons.");
+			startService(new Intent(this, RangingActivity.class));
 		}
 		else {
 			Log.d(TAG,"No beacons");
@@ -60,6 +71,16 @@ public class MonitoringActivity extends Service implements MonitorNotifier {
 	@Override
 	public void didDetermineStateForRegion(int state, Region region) {
 		Log.d(TAG,"didDetermineStateForRegion called with state: " + (state == 1 ? "INSIDE ("+state+")" : "OUTSIDE ("+state+")"));
+
+/*
+			FirebaseFirestore db = FirebaseFirestore.getInstance();
+			DocumentReference newRef = db.collection("becons").document();
+			newRef.set(region);
+			newRef.set('A');
+*/
+
+		System.out.println("Girdimmmmmm");
+
 	}
 
 	/*

@@ -245,6 +245,15 @@ public class BTBluetoothApp extends Service implements MonitorNotifier {
     public void didEnterRegion(Region arg0) {
         Log.d(TAG, "did enter region.");
         insideRegion = true;
+
+ /*
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference newRef = db.collection("becons").document();
+            newRef.set(arg0);
+            newRef.set('A');*/
+
+
+        System.out.println("Girdimmmm22222mm");
         // Send a notification to the user whenever a Beacon
         // matching a Region (defined above) are first seen.
         Log.d(TAG, "Sending notification.");
