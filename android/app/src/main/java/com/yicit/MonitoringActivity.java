@@ -1,14 +1,16 @@
 package com.yicit;
 
+import android.Manifest;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.IBinder;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-
-import androidx.annotation.Nullable;
 
 import org.altbeacon.beacon.BeaconManager;
 import org.altbeacon.beacon.MonitorNotifier;
@@ -19,71 +21,41 @@ import org.altbeacon.beacon.Region;
  * @author dyoung
  * @author Matt Tyler
  */
-public class MonitoringActivity extends Service implements MonitorNotifier {
+public class MonitoringActivity extends Activity implements MonitorNotifier {
 	protected static final String TAG = "MonitoringActivity";
 	private static final int PERMISSION_REQUEST_FINE_LOCATION = 1;
 	private static final int PERMISSION_REQUEST_BACKGROUND_LOCATION = 2;
 
-
-	/*
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-	}*/
-
-	@Override
-	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d(TAG, "onCreate");
-		//
-		if (BeaconManager.getInstanceForApplication(this).getMonitoredRegions().size() > 0) {
-			BeaconManager.getInstanceForApplication(this).stopMonitoring(BTBluetoothApp.bt_Region);
-			System.out.println("Enable Monitoring");
-		}
-		else {
-			BeaconManager.getInstanceForApplication(this).startMonitoring(BTBluetoothApp.bt_Region);
-			System.out.println("Disable Monitoring");
-		}
-		//
-
+		super.onCreate(savedInstanceState);
+		//setContentView(R.layout.activity_monitoring);
 		verifyBluetooth();
-		//requestPermissions();
+		requestPermissions();
 		BeaconManager.getInstanceForApplication(this).addMonitorNotifier(this);
 		// No need to start monitoring here because we already did it in
 		// BTBluetoothApp.onCreate
 		// check if we are currently inside or outside of that region to update the display
-		if (com.yicit.BTBluetoothApp.insideRegion) {
-			Log.d(TAG,"There is beacons.");
-			startService(new Intent(this, RangingActivity.class));
+		if (BTBluetoothApp.insideRegion) {
+			logToDisplay("There is beacons.");
 		}
 		else {
-			Log.d(TAG,"No beacons");
+			logToDisplay("No beacons");
 		}
-		return START_STICKY;
 	}
 
 	@Override
-	public void didEnterRegion(Region region) { Log.d(TAG,"didEnterRegion called"); }
+	public void didEnterRegion(Region region) { logToDisplay("didEnterRegion called"); }
 	@Override
 	public void didExitRegion(Region region) {
-		Log.d(TAG,"didExitRegion called");
+		logToDisplay("didExitRegion called");
 	}
 	@Override
 	public void didDetermineStateForRegion(int state, Region region) {
-		Log.d(TAG,"didDetermineStateForRegion called with state: " + (state == 1 ? "INSIDE ("+state+")" : "OUTSIDE ("+state+")"));
-
-/*
-			FirebaseFirestore db = FirebaseFirestore.getInstance();
-			DocumentReference newRef = db.collection("becons").document();
-			newRef.set(region);
-			newRef.set('A');
-*/
-
-		System.out.println("Girdimmmmmm");
-
+		logToDisplay("didDetermineStateForRegion called with state: " + (state == 1 ? "INSIDE ("+state+")" : "OUTSIDE ("+state+")"));
 	}
 
-	/*
 	private void requestPermissions() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
@@ -148,10 +120,9 @@ public class MonitoringActivity extends Service implements MonitorNotifier {
 			}
 		}
 	}
-*/
 
 
-	/*
+
 	@Override
 	public void onRequestPermissionsResult(int requestCode,
 										   String permissions[], int[] grantResults) {
@@ -196,13 +167,10 @@ public class MonitoringActivity extends Service implements MonitorNotifier {
 			}
 		}
 	}
-*/
-	public void onRangingClicked(View view) {
-		startService(new Intent(this, RangingActivity.class));
 
-		/*
+	public void onRangingClicked(View view) {
 		Intent myIntent = new Intent(this, RangingActivity.class);
-		this.startActivity(myIntent);*/
+		this.startActivity(myIntent);
 	}
 	/*public void onEnableClicked(View view) {
 		// This is a toggle.  Each time we tap it, we start or stop
@@ -227,7 +195,7 @@ public class MonitoringActivity extends Service implements MonitorNotifier {
 				builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
 					@Override
 					public void onDismiss(DialogInterface dialog) {
-						//finishAffinity();
+						finishAffinity();
 					}
 				});
 				builder.show();
@@ -242,7 +210,7 @@ public class MonitoringActivity extends Service implements MonitorNotifier {
 
 				@Override
 				public void onDismiss(DialogInterface dialog) {
-					//finishAffinity();
+					finishAffinity();
 				}
 
 			});
@@ -252,9 +220,16 @@ public class MonitoringActivity extends Service implements MonitorNotifier {
 
 	}
 
-	@Nullable
-	@Override
-	public IBinder onBind(Intent intent) {
-		return null;
+	private String cumulativeLog = "";
+	private void logToDisplay(String line) {
+		cumulativeLog += line+"\n";
+		runOnUiThread(new Runnable() {
+			public void run() {
+				//EditText editText = (EditText)MonitoringActivity.this
+				//		.findViewById(R.id.monitoringText);
+				//editText.setText(cumulativeLog);
+			}
+		});
 	}
+
 }

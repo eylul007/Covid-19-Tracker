@@ -1,8 +1,11 @@
 package com.yicit;
 
-import android.app.Activity;
-import android.os.Bundle;
+import android.app.Service;
+import android.content.Intent;
+import android.os.IBinder;
 import android.util.Log;
+
+import androidx.annotation.Nullable;
 
 import org.altbeacon.beacon.Beacon;
 import org.altbeacon.beacon.BeaconManager;
@@ -11,51 +14,45 @@ import org.altbeacon.beacon.Region;
 
 import java.util.Collection;
 
-public class RangingActivity extends Activity {
+public class BTRanging1 extends Service {
     protected static final String TAG = "RangingActivity";
     private BeaconManager beaconManager = BeaconManager.getInstanceForApplication(this);
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        moveTaskToBack(true);
-        //setContentView(R.layout.activity_ranging);
-    }
 
     @Override
-    protected void onResume() {
-        super.onResume();
+    public int onStartCommand(Intent intent, int flags, int startId) {
+
         RangeNotifier rangeNotifier = new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                System.out.println("BOKKKKKKKKKKKKKKKKKKKKKKKK");
                 if (beacons.size() > 0) {
                     Log.d(TAG, "didRangeBeaconsInRegion called with beacon count:  "+beacons.size());
                     Beacon firstBeacon = beacons.iterator().next();
 
-                    logToDisplay("The first beacon " + firstBeacon.toString() + " is about " + firstBeacon.getDistance() + " meters away.");
+                    Log.e(TAG,"The first beacon " + firstBeacon.toString() + " is about " + firstBeacon.getDistance() + " meters away.");
                 }
             }
 
         };
         beaconManager.addRangeNotifier(rangeNotifier);
         beaconManager.startRangingBeacons(BTBluetoothApp.bt_Region);
+
+        return START_NOT_STICKY;
     }
 
-    @Override
+   /* @Override
     protected void onPause() {
         super.onPause();
         beaconManager.stopRangingBeacons(BTBluetoothApp.bt_Region);
         beaconManager.removeAllRangeNotifiers();
-    }
+    }*/
 
-    private void logToDisplay(final String line) {
-        runOnUiThread(new Runnable() {
-            public void run() {
-                //EditText editText = (EditText)RangingActivity.this.findViewById(R.id.rangingText);
-                //editText.append(line+"\n");
-            }
-        });
+
+
+    @Nullable
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }
