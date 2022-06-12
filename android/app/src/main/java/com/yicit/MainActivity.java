@@ -77,8 +77,6 @@ public class MainActivity extends ReactActivity {
   }
 
   private void requestPermissions() {
-
-
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       if (this.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION)
               == PackageManager.PERMISSION_GRANTED) {

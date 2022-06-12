@@ -6,7 +6,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 
 import androidx.annotation.Nullable;
 
@@ -55,10 +54,7 @@ public class A_Monitoring extends Service implements MonitorNotifier {
         logToDisplay("didDetermineStateForRegion called with state: " + (state == 1 ? "INSIDE ("+state+")" : "OUTSIDE ("+state+")"));
     }
 
-    public void onRangingClicked(View view) {
-        Intent myIntent = new Intent(this, RangingActivity.class);
-        this.startActivity(myIntent);
-    }
+
 
     private String cumulativeLog = "";
     private void logToDisplay(String line) {

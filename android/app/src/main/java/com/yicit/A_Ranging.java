@@ -28,7 +28,7 @@ public class A_Ranging extends Service {
         RangeNotifier rangeNotifier = new RangeNotifier() {
             @Override
             public void didRangeBeaconsInRegion(Collection<Beacon> beacons, Region region) {
-                System.out.println("booooooooook");
+
                 if (beacons.size() > 0) {
                     Log.d(TAG, "didRangeBeaconsInRegion called with beacon count:  " + beacons.size());
                     Beacon firstBeacon = beacons.iterator().next();
@@ -36,10 +36,9 @@ public class A_Ranging extends Service {
                     Log.d(TAG, "The first beacon " + firstBeacon.toString() + " is about " + firstBeacon.getDistance() + " meters away.");
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-                    DocumentReference newCityRef = db.collection("becons").document();
+                    DocumentReference newCityRef = db.collection("batu").document();
 
-
-                    deneme d= new deneme(firstBeacon.toString(),firstBeacon.getDistance());
+                    DataCollection d= new DataCollection(firstBeacon.toString(),firstBeacon.getDistance());
                     newCityRef.set(d);
                 }
             }
