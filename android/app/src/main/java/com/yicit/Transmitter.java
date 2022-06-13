@@ -72,7 +72,7 @@ public class Transmitter extends Service {
                     .build();
             transmitStart(beacon);
 
-            
+
         }
         System.out.println("In the start command!");
 
